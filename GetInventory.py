@@ -5,8 +5,6 @@
 
 
 
-
-
 # In[35]:
 
 
@@ -29,7 +27,7 @@ password = keyring.get_password('magic', 'jmeisenh')
 options = Options()
 options.binary_location = "C:/Program Files/Mozilla Firefox/firefox.exe"
 
-PATH = "C:/Users/jmeis/Projects/MagicPrice/geckodriver.exe"
+PATH = "C:/Users/Justin Meisenhelter/Projects/MagicPrice/geckodriver.exe"
 driver = webdriver.Firefox(executable_path=PATH, options = options)
 
 driver.get("https://deckbox.org/accounts/login?return_to=/sets/3285758")
@@ -46,47 +44,46 @@ WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "submit_butto
 time.sleep(2)
 a = ActionChains(driver)
 #activate tools hover menu
-m = driver.find_element_by_link_text("Tools")
+m = driver.find_element("link text", "Tools")
 a.move_to_element(m).perform()
 #click export
-n = driver.find_element_by_link_text("Export")
+n = driver.find_element("link text", "Export")
 a.move_to_element(n).click().perform()
 time.sleep(1)
 
 # click on extra columns button to expand list
-driver.find_element_by_id("extra_columns_container").click()
+driver.find_element("id", "extra_columns_container").click()
 time.sleep(1)
-driver.switch_to_default_content()
 # click on price
-driver.find_element_by_link_text("Price").click()
+driver.find_element("link text", "Price").click()
 #click on rarity
-driver.find_element_by_link_text("Rarity").click()
+driver.find_element("link text", "Rarity").click()
 # click on type
-driver.find_element_by_xpath("/html/body/div[12]/div[1]/ul/li[1]/a").click()
+driver.find_element("xpath", "/html/body/div[12]/div[1]/ul/li[1]/a").click()
 # click on cost
-driver.find_element_by_xpath("/html/body/div[12]/div[1]/ul/li[2]/a").click()
+driver.find_element("xpath", "/html/body/div[12]/div[1]/ul/li[2]/a").click()
 # done button
-driver.find_element_by_xpath("/html/body/div[12]/div[2]/div").click()
+driver.find_element("xpath", "/html/body/div[12]/div[2]/div").click()
 time.sleep(1)
 # finish export
-driver.find_element_by_css_selector("button.btn-primary:nth-child(7)").click()
+driver.find_element("css selector", "button.btn-primary:nth-child(7)").click()
 # quit instance
 time.sleep(3)
 driver.quit()
 
 # identify new exported file
-src_path = r'C:\Users\jmeis\Downloads'
+src_path = r'C:\Users\Justin Meisenhelter\Downloads'
 file_type = r'\*csv'
 files = glob.glob(src_path + file_type)
 max_file = max(files, key=os.path.getctime)
 
 #move file to working directory
 file_name = os.path.basename(max_file)
-dst_path = r'C:\Users\jmeis\Projects\MagicPrice\Exports'
+dst_path = r'C:\Users\Justin Meisenhelter\Projects\MagicPrice\Exports'
 shutil.move(max_file, dst_path+ '\\' +datetime.today().strftime('%Y-%m-%d') + '.csv')
 
 # Import Data
-importDir = r'C:\Users\jmeis\Projects\MagicPrice\Exports' + '\\' + datetime.today().strftime('%Y-%m-%d') + '.csv'
+importDir = r'C:\Users\Justin Meisenhelter\Projects\MagicPrice\Exports' + '\\' + datetime.today().strftime('%Y-%m-%d') + '.csv'
 df = pd.read_csv(importDir)
 # Keep only usable columns
 df = df[['Count', 'Name', 'Edition', 'Card Number', 'Condition', 'Language', 'Foil', 'Type', 'Cost', 'Rarity', 'Price']]
@@ -144,7 +141,7 @@ for key, value in colorDict.items():
 # all remaining empty cells will be colorless
 df['Color'] = df['Color'].str.replace(r'^\s*$', 'Colorless')
 # Save file
-dst_path = r'C:\Users\jmeis\Projects\MagicPrice\Exports'
+dst_path = r'C:\Users\Justin Meisenhelter\Projects\MagicPrice\Exports'
 df.to_csv(dst_path + '\\' + 'Cleaned_' + datetime.today().strftime('%Y-%m-%d') + '.csv', index = False)
 # remove old uncleaned file
 os.remove(dst_path + '\\' + datetime.today().strftime('%Y-%m-%d') + '.csv')
